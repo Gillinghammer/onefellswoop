@@ -1,38 +1,34 @@
 // server.js
-
-// base setup
-// ===============
-
-// call the packages we need
 var express     = require('express');
-var app         = express(); // define our app using express
-var bodyParser  = require('body-parser');
+var mongoose    = require('mongoose');
+var router      = require('./routes');
 
-// configure app to user bodyParser()
-// this will let us get the data from a POST
+// connect to db
+var dbUser = 'admin'
+var dbPassword = 'password'
+mongoose.connect(`mongodb://#{dbUser}:#{dbPassword}@waffle.modulusmongo.net:27017/yg5aTari/`)
+
+// define app
+var app         = express(); 
+var bodyParser  = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true  }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080;  // set our port
+// Router middleware
+router.use(function(req, res, next) {
+  console.log('something is happening.');
+  next();
+});
 
-// ROUTES FOR API
-// TODO: separate into own file later
-// =================
-var router = express.Router();  // get an instance of the express router
-
-// test route teo make sure it is working 
-// accessed at GET http://localhost:8080/api
+// test api
 router.get('/', function(req, res) {
   res.json({  message: 'hooray! welcome to our api!'  });
 });
 
-// more routes for our API will happen here
-
-// Register our routes
-// all our routes will be prefixed with /api
-app.use('/api', router);
+app.use('/api', router)
 
 // Start the server
-// =================
+var port = process.env.PORT || 8888;  // set our port
 app.listen(port);
+
 console.log('Magic happens on port ' + port );
