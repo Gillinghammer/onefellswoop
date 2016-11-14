@@ -30,9 +30,9 @@ router.route('/employers')
     console.log('post function' + newEmployer);
     newEmployer.save(function(err) {
       console.log('inside save')
-      if (err) return handleError(err);
-      res.send(err);
-      res.json({  message: 'Employer Created!'});
+      if (err) return console.log(err)
+      console.log('saved!')
+      res.json({message: "ok"})
     });
   });
 

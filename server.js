@@ -5,7 +5,7 @@ var router      = require('./routes');
 var morgan      = require('morgan');
 
 // connect to db
-mongoose.connect('mongodb://admin:password@waffle.modulusmongo.net:27017/Ebyd7ewa')
+mongoose.connect('mongodb://localhost:27017/onefellswoop')
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
