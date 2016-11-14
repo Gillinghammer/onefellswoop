@@ -25,14 +25,12 @@ router.route('/employers')
 
   .post(function(req,res) {
     console.log('inside POST')
-    var employer = new Employer();  // creates a new instance of Employer
-    employer.name = req.body.name;  // sets employer name
-
-    console.log('post function' + employer);
-    employer.save(function(err) {
+    var newEmployer = new Employer();  // creates a new instance of Employer
+    newEmployer.name = req.body.name;  // sets newEmployer name
+    console.log('post function' + newEmployer);
+    newEmployer.save(function(err) {
       console.log('inside save')
-      if (err)
-        console.log(err);
+      if (err) return handleError(err);
       res.send(err);
       res.json({  message: 'Employer Created!'});
     });

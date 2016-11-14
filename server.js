@@ -2,6 +2,7 @@
 var express     = require('express');
 var mongoose    = require('mongoose');
 var router      = require('./routes');
+var morgan      = require('morgan');
 
 // connect to db
 var dbUser = 'admin'
@@ -13,6 +14,7 @@ var app         = express();
 var bodyParser  = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true  }));
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 // Router middleware
 router.use(function(req, res, next) {
