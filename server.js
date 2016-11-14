@@ -5,9 +5,14 @@ var router      = require('./routes');
 var morgan      = require('morgan');
 
 // connect to db
-var dbUser = 'admin'
-var dbPassword = 'password'
-mongoose.connect(`mongodb://#{dbUser}:#{dbPassword}@waffle.modulusmongo.net:27017/yg5aTari/`)
+mongoose.connect('mongodb://admin:password@waffle.modulusmongo.net:27017/Ebyd7ewa')
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+  console.log('db connected!')
+});
 
 // define app
 var app         = express(); 
