@@ -19,8 +19,12 @@ router.get('/', function(req, res) {
 router.route('/employers')
 
   .get(function(req, res) {
-    console.log('inside GET')
-    res.json({message: 'return list of employers'})
+    Employer.find(function(err, employers) {
+      if (err)
+          res.send(err);
+
+      res.json(employers);
+    });
   })
 
   .post(function(req,res) {
@@ -32,7 +36,7 @@ router.route('/employers')
       console.log('inside save')
       if (err) return console.log(err)
       console.log('saved!')
-      res.json({message: "ok"})
+      res.json({message: "employer saved"})
     });
   });
 
