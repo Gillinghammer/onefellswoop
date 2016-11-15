@@ -11,18 +11,25 @@ router.use(function(req, res, next) {
   next();
 });
 
+// ROOT api/
 router.get('/', function(req, res) {
   res.json({  message: 'hooray! welcome to our api!'  });
 });
 
-// more routes for our API will happen here
+
+// CANDIDATE ROUTES //
+
 router.route('/candidates')
+
+  // GET api/candidates
   .get(function(req,res) {
     Candidate.find(function(err, candidates) {
       if (err) res.send(err);
       res.json(candidates);
     });
   })
+
+  // POST api/candidates
   .post(function(req,res) {
     console.log("inside candidate POST!")
     var newCandidate = new Candidate(req.body);
@@ -35,7 +42,8 @@ router.route('/candidates')
   });
 
 router.route('/candidates/:candidate_id')
-
+  
+  // GET api/candidates/:candidate_id
   .get(function(req,res){
     Candidate.findById(req.params.candidate_id, function(err, candidate) {
       if (err) res.send(err)
@@ -43,36 +51,39 @@ router.route('/candidates/:candidate_id')
     })
   })
 
+  // PUT api/canidates/:candidate_id
   .put(function(req, res) {
+      Candidate.findById(req.params.candidate_id, function(err, candidate) {
+        if (err) res.send(err);
+        candidate.firstName = req.body.firstName;
+        candidate.lastName = req.body.lastName;
+        candidate.email = req.body.email;
+        candidate.phone = req.body.phone;
+        candidate.links = req.body.links;
+        candidate.location = req.body.location;
+        candidate.open = req.body.open;
+        candidate.minimumSalary = req.body.minimumSalary;
+        candidate.save(function(err) {
+          if (err) res.send(err);
+          res.json({ message: 'candidate updated!' });
+        });
 
-          Candidate.findById(req.params.candidate_id, function(err, candidate) {
-              if (err) res.send(err);
-              candidate.firstName = req.body.firstName;
-              candidate.lastName = req.body.lastName;
-              candidate.email = req.body.email;
-              candidate.phone = req.body.phone;
-              candidate.links = req.body.links;
-              candidate.location = req.body.location;
-              candidate.open = req.body.open;
-              candidate.minimumSalary = req.body.minimumSalary;
-              candidate.save(function(err) {
-                if (err) res.send(err);
-                res.json({ message: 'candidate updated!' });
-              });
-
-          });
-      })
-
-  .delete(function(req, res) {
-          Candidate.remove({
-              _id: req.params.candidate_id
-          }, function(err, candidate) {
-              if (err) res.send(err);
-              res.json({ message: 'Successfully deleted' });
-          });
       });
+    })  
+
+  // DELETE api/candidates/:candidate_id
+  .delete(function(req, res) {
+    Candidate.remove({
+      _id: req.params.candidate_id
+  }, function(err, candidate) {
+      if (err) res.send(err);
+      res.json({ message: 'Successfully deleted' });
+    });
+  });
 
 router.route('/candidates/:candidate_id/education')
+  
+  // POST api/candidates/:candidate_id/education
   .post(function(req,res) {
     Candidate.findById(req.params.candidate_id, function(err, candidate) {
       if (err) res.send(err)
@@ -90,6 +101,8 @@ router.route('/candidates/:candidate_id/education')
   })
 
 router.route('/candidates/:candidate_id/experience')
+
+  // POST api/candidates/:candidate_id/experience
   .post(function(req,res) {
     Candidate.findById(req.params.candidate_id, function(err, candidate) {
       if (err) res.send(err)
@@ -112,13 +125,13 @@ router.route('/candidates/:candidate_id/experience')
     })
   })
 
+// EMPLOYER ROUTES //
+
 router.route('/employers')
-
-  .get(function(req, res) {
+  
+.get(function(req, res) {
     Employer.find(function(err, employers) {
-      if (err)
-          res.send(err);
-
+      if (err) res.send(err);
       res.json(employers);
     });
   })
