@@ -172,5 +172,41 @@ router.route('/employers/:employer_id')
           });
       });
 
+router.route('/employers/:employer_id/companies')
+  .post(function(req,res) {
+    Employer.findById(req.params.employer_id, function(err, employer) {
+      if (err) res.send(err)
+      console.log(req.body)
+      var companies = {};
+      companies.targetCompanies = req.body.targetCompanies.split(',').map(function(item) {
+        return {  companyName: item.trim()  }
+      });
+      employer.targetCompanies = companies.targetCompanies;
+      employer.save(function(err) {
+        console.log("saving companies to target...")
+        if (err) res.send(err);
+        console.log("saved!")
+        res.json({ message: 'companies added to employer!' });
+      });
+    })
+  })
+
+  router.route('/employers/:employer_id/educations')
+    .post(function(req,res) {
+      Employer.findById(req.params.employer_id, function(err, employer) {
+        if (err) res.send(err)
+        var schools = {};
+        schools.targetEducations = req.body.targetEducations.split(',').map(function(item) {
+          return {  schoolName: item.trim()  }
+        });
+        employer.targetEducations = schools.targetEducations;
+        employer.save(function(err) {
+          console.log("saving schools to target...")
+          if (err) res.send(err);
+          console.log("saved!")
+          res.json({ message: 'schools added to employer!' });
+        });
+      })
+    })
 
   module.exports = router;
