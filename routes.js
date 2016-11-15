@@ -76,7 +76,12 @@ router.route('/candidates/:candidate_id/education')
   .post(function(req,res) {
     Candidate.findById(req.params.candidate_id, function(err, candidate) {
       if (err) res.send(err)
-      candidate.education.push({ schoolName: req.body.schoolName, degrees: req.body.degrees });
+      var education = {};
+      education.schoolName = req.body.schoolName;
+      education.degrees = req.body.degrees.split(",").map(function(item) {
+        return {degree: item.trim()}
+      });
+      candidate.education.push(education);
       candidate.save(function(err) {
         if (err) res.send(err);
         res.json({ message: 'education added for candidate!' });
