@@ -25,16 +25,7 @@ router.route('/candidates')
   })
   .post(function(req,res) {
     console.log("inside candidate POST!")
-    var newCandidate = new Candidate();
-    newCandidate.firstName = req.body.firstName;
-    newCandidate.lastName = req.body.lastName;
-    newCandidate.email = req.body.email;
-    newCandidate.phone = req.body.phone;
-    newCandidate.links = req.body.links;
-    newCandidate.location = req.body.location;
-    newCandidate.open = req.body.open;
-    newCandidate.minimumSalary = req.body.minimumSalary;
-
+    var newCandidate = new Candidate(req.body);
     newCandidate.save(function(err) {
       console.log("saving candidate...")
       if(err) return console.log(err)
@@ -85,12 +76,33 @@ router.route('/candidates/:candidate_id/education')
   .post(function(req,res) {
     Candidate.findById(req.params.candidate_id, function(err, candidate) {
       if (err) res.send(err)
-      // res.json(candidate);
-      console.log(req.body.degrees)
       candidate.education.push({ schoolName: req.body.schoolName, degrees: req.body.degrees });
       candidate.save(function(err) {
         if (err) res.send(err);
         res.json({ message: 'education added for candidate!' });
+      });
+    })
+  })
+
+router.route('/candidates/:candidate_id/experience')
+  .post(function(req,res) {
+    Candidate.findById(req.params.candidate_id, function(err, candidate) {
+      if (err) res.send(err)
+      console.log(req.body)
+      var experience = {};
+      experience.jobTitle = req.body.jobTitle;
+      experience.startDate = req.body.startDate;
+      experience.finishDate = req.body.finishDate;
+      experience.skills = req.body.skills.split(',').map(function(item) {
+        return {skill: item.trim()}
+      });
+      console.log("exp object: " + experience)
+      candidate.experience.push(experience)
+      candidate.save(function(err) {
+        console.log("saving experience...")
+        if (err) res.send(err);
+        console.log("saved!")
+        res.json({ message: 'experience added for candidate!' });
       });
     })
   })
