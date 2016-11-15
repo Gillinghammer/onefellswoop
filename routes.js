@@ -56,7 +56,14 @@ router.route('/candidates/:candidate_id')
 
           Candidate.findById(req.params.candidate_id, function(err, candidate) {
               if (err) res.send(err);
-              candidate.name = req.body.name;  // update the candidates info
+              candidate.firstName = req.body.firstName;
+              candidate.lastName = req.body.lastName;
+              candidate.email = req.body.email;
+              candidate.phone = req.body.phone;
+              candidate.links = req.body.links;
+              candidate.location = req.body.location;
+              candidate.open = req.body.open;
+              candidate.minimumSalary = req.body.minimumSalary;
               candidate.save(function(err) {
                 if (err) res.send(err);
                 res.json({ message: 'candidate updated!' });
