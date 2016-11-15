@@ -81,6 +81,20 @@ router.route('/candidates/:candidate_id')
           });
       });
 
+router.route('/candidates/:candidate_id/education')
+  .post(function(req,res) {
+    Candidate.findById(req.params.candidate_id, function(err, candidate) {
+      if (err) res.send(err)
+      // res.json(candidate);
+      console.log(req.body.degrees)
+      candidate.education.push({ schoolName: req.body.schoolName, degrees: req.body.degrees });
+      candidate.save(function(err) {
+        if (err) res.send(err);
+        res.json({ message: 'education added for candidate!' });
+      });
+    })
+  })
+
 router.route('/employers')
 
   .get(function(req, res) {
