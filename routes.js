@@ -17,7 +17,12 @@ router.get('/', function(req, res) {
 
 // more routes for our API will happen here
 router.route('/candidates')
-
+  .get(function(req,res) {
+    Candidate.find(function(err, candidates) {
+      if (err) res.send(err);
+      res.json(candidates);
+    });
+  })
   .post(function(req,res) {
     console.log("inside candidate POST!")
     var newCandidate = new Candidate();
