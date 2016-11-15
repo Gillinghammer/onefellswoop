@@ -128,14 +128,15 @@ router.route('/candidates/:candidate_id/experience')
 // EMPLOYER ROUTES //
 
 router.route('/employers')
-  
+ 
+ // GET api/employers 
 .get(function(req, res) {
     Employer.find(function(err, employers) {
       if (err) res.send(err);
       res.json(employers);
     });
   })
-
+  // POST api/employers
   .post(function(req,res) {
     console.log('inside POST')
     var newEmployer = new Employer();  // creates a new instance of Employer
@@ -155,14 +156,16 @@ router.route('/employers')
   });
 
 router.route('/employers/:employer_id')
-
+  
+  // GET api/employers/:employer_id
   .get(function(req,res){
     Employer.findById(req.params.employer_id, function(err, employer) {
       if (err) res.send(err)
       res.json(employer);
     })
   })
-
+  
+  // PUT api/employers/:employer_id
   .put(function(req, res) {
 
           Employer.findById(req.params.employer_id, function(err, employer) {
@@ -176,6 +179,7 @@ router.route('/employers/:employer_id')
           });
       })
 
+  // DELETE api/employers/:employer_id
   .delete(function(req, res) {
           Employer.remove({
               _id: req.params.employer_id
@@ -186,6 +190,8 @@ router.route('/employers/:employer_id')
       });
 
 router.route('/employers/:employer_id/companies')
+  
+  // POST api/employers/:employer_id/companies
   .post(function(req,res) {
     Employer.findById(req.params.employer_id, function(err, employer) {
       if (err) res.send(err)
@@ -205,6 +211,8 @@ router.route('/employers/:employer_id/companies')
   })
 
   router.route('/employers/:employer_id/educations')
+
+    // POST api/employers/:employer_id/educations
     .post(function(req,res) {
       Employer.findById(req.params.employer_id, function(err, employer) {
         if (err) res.send(err)
