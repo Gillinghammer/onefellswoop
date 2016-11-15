@@ -43,6 +43,37 @@ router.route('/candidates')
     });
   });
 
+router.route('/candidates/:candidate_id')
+
+  .get(function(req,res){
+    Candidate.findById(req.params.candidate_id, function(err, candidate) {
+      if (err) res.send(err)
+      res.json(candidate);
+    })
+  })
+
+  .put(function(req, res) {
+
+          Candidate.findById(req.params.candidate_id, function(err, candidate) {
+              if (err) res.send(err);
+              candidate.name = req.body.name;  // update the candidates info
+              candidate.save(function(err) {
+                if (err) res.send(err);
+                res.json({ message: 'candidate updated!' });
+              });
+
+          });
+      })
+
+  .delete(function(req, res) {
+          Candidate.remove({
+              _id: req.params.candidate_id
+          }, function(err, candidate) {
+              if (err) res.send(err);
+              res.json({ message: 'Successfully deleted' });
+          });
+      });
+
 router.route('/employers')
 
   .get(function(req, res) {
