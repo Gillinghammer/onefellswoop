@@ -160,6 +160,7 @@ router.route('/employers/:employer_id')
   // GET api/employers/:employer_id
   .get(function(req,res){
     Employer.findById(req.params.employer_id, function(err, employer) {
+      console.log("fetching employer with id: ", req.params.employer_id)
       if (err) res.send(err)
       res.json(employer);
     })
@@ -167,10 +168,16 @@ router.route('/employers/:employer_id')
   
   // PUT api/employers/:employer_id
   .put(function(req, res) {
-
+          console.log("params", req.params)
           Employer.findById(req.params.employer_id, function(err, employer) {
               if (err) res.send(err);
-              employer.name = req.body.name;  // update the employers info
+              console.log( "employer" , employer )
+              employer.name = req.body.name;
+              employer.location = req.body.location;
+              employer.website = req.body.website;
+              employer.primaryEmail = req.body.primaryEmail;
+              employer.targetEducations = req.body.targetEducations;
+              employer.targetCompanies = req.body.targetCompanies;
               employer.save(function(err) {
                 if (err) res.send(err);
                 res.json({ message: 'employer updated!' });
